@@ -1,18 +1,22 @@
+import time
+import datetime
+
 # senarai
-daftar_menu = ['Mie Rebus',
+daftar_menu = [
+        'Mie Rebus',
         'Nasi Goreng',
         'Bubur Ayam',
         'Nasi Campur',
         'Selesai']
-daftar_harga = [10000,
-         12000,
-         13000,
-         15000,
-         0]
+daftar_harga = [
+        10000,
+        12000,
+        13000,
+        15000,
+        0]
 daftar_pembayaran = [
     'Qris',
-    'Tunai',
-    'Debit'
+    'Tunai'
 ]
 
 # variabel
@@ -68,8 +72,10 @@ def pembayaran_tunai(diskon):
     while True:
         try:
             jumlah_uang = int(input("Masukkan nominal uang anda: Rp."))
+
             if jumlah_uang >= diskon:
                 kembalian = jumlah_uang - diskon
+                print("== Pembayaran Via Tunai ==")
                 print("==Pembayaran Anda Telah Berhasil==")
                 print("==Silahkan ke kasir untuk memberikan bukti ini==")
                 print("Kembalian:", kembalian)
@@ -80,8 +86,28 @@ def pembayaran_tunai(diskon):
                 continue
         except ValueError:
             print("masukkan angka, coba lagi")
-    
 
+def pembayaran_qris(diskon):
+    print("== Pembayaran Via Qris ==")
+    print("Total yang harus dibayar: Rp.", diskon)
+    print("Silakan scan QR code di bawah ini (Simulasi):")
+    print("[  [X] QR CODE SIMULASI [X]  ]")
+    print("Menunggu konfirmasi pembayaran...")
+    time.sleep(3) 
+    
+    print("\n== Pembayaran QRIS Berhasil! ==")
+    print("Silakan tunjukkan layar ini ke kasir.")
+
+def struk_buktiPembayaran(diskon, nama_metode, waktu_transaksi):
+    print("==================================")
+    print("       STRUK BUKTI PEMBAYARAN     ")
+    print("==================================")
+    print("Metode Pembayaran :", nama_metode)
+    print("Total Dibayar     : Rp", diskon)
+    print("Waktu Transaksi   :", waktu_transaksi)
+    print("==================================")
+    print("== Tunjukkan bukti ini ke kasir ==")
+   
 nama_menu = 0
 while nama_menu != 5:
     # menampilkan menu
@@ -117,21 +143,22 @@ while nama_menu != 5:
                                 print(pembayaran + 1,'.', daftar_pembayaran[pembayaran])
 
                         pilih_pembayaran = int(input("Masukkan nomor pembayaran yang tertera pada daftar:"))
+                        waktu_transaksi = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
                         if pilih_pembayaran == 1:
-                        # sebuah qris dengan timer 3 menit. namun, dimenit ke 1 sudah muncul apakah pembayaran sudah berhasil?
-                            print("wait a minute")
+                        # sebuah qris dengan timer. namun, dimenit ke 1 sudah muncul apakah pembayaran sudah berhasil?
+                            pembayaran_qris(diskon)
+                            nama_metode = "QRIS"
 
                         elif pilih_pembayaran == 2:
-                            # membuat fungsi memasukkan duid beserta logikanya
+                            # membuat fungsi memasukkan duit beserta logikanya
                             pembayaran_tunai(diskon)
+                            nama_metode = "Tunai"
 
-                        elif pilih_pembayaran == 3:
-                            print("==Silahkan menuju ke kasir untuk melakukan pembayaran==")
-                            print("==Jangan lupa untuk foto bukti pembayaran anda==")
+                        struk_buktiPembayaran(diskon, nama_metode, waktu_transaksi)
 
                         print('selesai')
-                        break # supaya ketika user baru mulai tapi pilih menu 5 langsung selesai
+                        break 
 
                     except ValueError:
                         print("==angka tidak ada pada pilihan, coba lagi==")
@@ -139,8 +166,6 @@ while nama_menu != 5:
                 print("Keranjang belanja anda kosong")
                 print('selesai')
                 break
-        
-
         else:
             print('==angka tidak ada pada menu, coba lagi==')
             menampilkan_menu(daftar_harga, daftar_menu)
