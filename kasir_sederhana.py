@@ -32,21 +32,32 @@ def logikaKeranjang_belanja(nama_menu, jumlah_makanan, keranjang_belanja, daftar
     if sudah_ada == False:
         keranjang_belanja.append([daftar_menu[nama_menu-1], daftar_harga[nama_menu-1], jumlah_makanan]) 
 
-def rincian_pembelian(keranjang_belanja, total, cacah):
+def diskon_harga(total):
+    if total >= 100000:
+        potongan = total * 0.15
+        setelah_diskon = total - potongan
+        return setelah_diskon
+    else:
+        return total
+
+def rincian_pembelian(keranjang_belanja, total, cacah, logika_diskon):
     print('==================================')
     print('jumlah memesan:', cacah, 'x')
     print('Rincian Pembelian:')
-    print('|Menu|Harga Satuan|Jumlah = total')
+    print('No|Menu|Harga Satuan|Jumlah = total')
     for i in range(len(keranjang_belanja)):
         nama_menu = keranjang_belanja[i][0]
         harga_satuan = keranjang_belanja[i][1]
         jumlah_makanan = keranjang_belanja[i][2]
 
         total_sementara =  jumlah_makanan * harga_satuan
-        total += total_sementara
         print(i + 1,'.|',nama_menu,"|",harga_satuan,"|",jumlah_makanan,"=",total_sementara)
 
     print("Total Pembayaran:", total)
+
+    if total >= 100000:
+        print("Total Pembayaran Setelah Diskon:", logika_diskon)
+        print("Selamat Anda Mendapatkan Diskon 15%")
 
 nama_menu = 0
 while nama_menu != 5:
@@ -67,23 +78,24 @@ while nama_menu != 5:
         elif nama_menu == 4:
             harga_satuan = 15000
         elif nama_menu == 5:
-            rincian_pembelian(keranjang_belanja, total, cacah)
+            logika_diskon = diskon_harga(total)
+            rincian_pembelian(keranjang_belanja, total, cacah, logika_diskon)
             print('selesai')
-            break
+            break # supaya ketika user baru mulai tapi pencet 5 langsung selesai
         else:
             print('==angka tidak ada pada menu, coba lagi==')
             menampilkan_menu(daftar_harga, daftar_menu)
 
-        # kenapa jumlah makanan ditaro dibawah?? supaya ketika pilih nama_menunya 5 langsung ke eksekusi
-        jumlah_makanan = int(input("masukkan jumlah makanan:"))
+        if nama_menu != 5:
+            jumlah_makanan = int(input("masukkan jumlah makanan:"))
+
+            total_sementara =  jumlah_makanan * harga_satuan
+            total += total_sementara
+            print("==Total saat ini==:", total_sementara)
 
     except ValueError:
         print("masukkan angka, coba lagi")
 
     else:
-        total_sementara =  jumlah_makanan * harga_satuan
-        print("==Total saat ini==:", total_sementara)
-
         cacah += 1
-
         logikaKeranjang_belanja(nama_menu, jumlah_makanan, keranjang_belanja, daftar_menu, daftar_harga)
