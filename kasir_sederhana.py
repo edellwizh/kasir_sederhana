@@ -1,14 +1,19 @@
 # senarai
-daftar_menu = ['mie rebus',
-        'nasi goreng',
-        'bubur ayam',
-        'nasi campur',
-        'selesai']
+daftar_menu = ['Mie Rebus',
+        'Nasi Goreng',
+        'Bubur Ayam',
+        'Nasi Campur',
+        'Selesai']
 daftar_harga = [10000,
          12000,
          13000,
          15000,
          0]
+daftar_pembayaran = [
+    'Qris',
+    'Tunai',
+    'Debit'
+]
 
 # variabel
 cacah = 0
@@ -19,7 +24,7 @@ keranjang_belanja = []
 def menampilkan_menu(daftar_menu, daftar_harga):
     print("kasir sederhana")
     print("===============")
-    for indeks in range(0, len(daftar_menu)):
+    for indeks in range(len(daftar_menu)):
         print(indeks + 1,'.', daftar_menu[indeks], '| Rp.', daftar_harga[indeks])
 
 def logikaKeranjang_belanja(nama_menu, jumlah_makanan, keranjang_belanja, daftar_menu, daftar_harga):
@@ -40,10 +45,10 @@ def diskon_harga(total):
     else:
         return total
 
-def rincian_pembelian(keranjang_belanja, total, cacah, logika_diskon):
-    print('==================================')
-    print('jumlah memesan:', cacah, 'x')
+def rincian_pembelian(keranjang_belanja, total, cacah, diskon):
+    print("===============")
     print('Rincian Pembelian:')
+    print('jumlah memesan:', cacah, 'x')
     print('No|Menu|Harga Satuan|Jumlah = total')
     for i in range(len(keranjang_belanja)):
         nama_menu = keranjang_belanja[i][0]
@@ -56,8 +61,26 @@ def rincian_pembelian(keranjang_belanja, total, cacah, logika_diskon):
     print("Total Pembayaran:", total)
 
     if total >= 100000:
-        print("Total Pembayaran Setelah Diskon:", logika_diskon)
-        print("Selamat Anda Mendapatkan Diskon 15%")
+        print("Total Pembayaran Setelah Diskon:", diskon)
+        print("==Selamat Anda Mendapatkan Diskon 15%==")
+
+def pembayaran_tunai(diskon):
+    while True:
+        try:
+            jumlah_uang = int(input("Masukkan nominal uang anda: Rp."))
+            if jumlah_uang >= diskon:
+                kembalian = jumlah_uang - diskon
+                print("==Pembayaran Anda Telah Berhasil==")
+                print("==Silahkan ke kasir untuk memberikan bukti ini==")
+                print("Kembalian:", kembalian)
+                break
+
+            else:
+                print("==Uang yang Anda masukkan kurang dari harga pembelian Anda, coba lagi==")
+                continue
+        except ValueError:
+            print("masukkan angka, coba lagi")
+    
 
 nama_menu = 0
 while nama_menu != 5:
@@ -77,11 +100,47 @@ while nama_menu != 5:
             harga_satuan = 13000
         elif nama_menu == 4:
             harga_satuan = 15000
+
         elif nama_menu == 5:
-            logika_diskon = diskon_harga(total)
-            rincian_pembelian(keranjang_belanja, total, cacah, logika_diskon)
-            print('selesai')
-            break # supaya ketika user baru mulai tapi pencet 5 langsung selesai
+            if len(keranjang_belanja) > 0:
+                diskon = diskon_harga(total)
+                rincian_pembelian(keranjang_belanja, total, cacah, diskon)
+
+                # Logika Pembayaran
+                while True:
+                    try:
+                        if len(keranjang_belanja) > 0:
+                            print("===============")
+                            print("==Silahkan Melakukan Pembayaran==")
+                            print("Pilih Pembayaran Anda:")
+                            for pembayaran in range(len(daftar_pembayaran)):
+                                print(pembayaran + 1,'.', daftar_pembayaran[pembayaran])
+
+                        pilih_pembayaran = int(input("Masukkan nomor pembayaran yang tertera pada daftar:"))
+
+                        if pilih_pembayaran == 1:
+                        # sebuah qris dengan timer 3 menit. namun, dimenit ke 1 sudah muncul apakah pembayaran sudah berhasil?
+                            print("wait a minute")
+
+                        elif pilih_pembayaran == 2:
+                            # membuat fungsi memasukkan duid beserta logikanya
+                            pembayaran_tunai(diskon)
+
+                        elif pilih_pembayaran == 3:
+                            print("==Silahkan menuju ke kasir untuk melakukan pembayaran==")
+                            print("==Jangan lupa untuk foto bukti pembayaran anda==")
+
+                        print('selesai')
+                        break # supaya ketika user baru mulai tapi pilih menu 5 langsung selesai
+
+                    except ValueError:
+                        print("==angka tidak ada pada pilihan, coba lagi==")
+            else:
+                print("Keranjang belanja anda kosong")
+                print('selesai')
+                break
+        
+
         else:
             print('==angka tidak ada pada menu, coba lagi==')
             menampilkan_menu(daftar_harga, daftar_menu)
@@ -94,7 +153,7 @@ while nama_menu != 5:
             print("==Total saat ini==:", total_sementara)
 
     except ValueError:
-        print("masukkan angka, coba lagi")
+        print("==angka tidak ada pada menu, coba lagi==")
 
     else:
         cacah += 1
