@@ -15,27 +15,27 @@ cacah = 0
 total = 0 
 keranjang_belanja = []
    
-nama_menu = 0
-while nama_menu != 5:
+id_pilihan = 0
+while id_pilihan != 5:
     # menampilkan menu
     data_menu_dari_query = ambil_menu_db()
     menampilkan_menu(data_menu_dari_query)
 
     # input
     try:
-        nama_menu = int(input("masukkan angka makanan pada menu:"))
+        id_pilihan = int(input("masukkan angka makanan pada menu:"))
 
         # logika pilihan
-        if nama_menu == 1:
+        if id_pilihan == 1:
             harga_satuan = 10000
-        elif nama_menu == 2: 
+        elif id_pilihan == 2: 
             harga_satuan = 12000
-        elif nama_menu == 3:
+        elif id_pilihan == 3:
             harga_satuan = 13000
-        elif nama_menu == 4:
+        elif id_pilihan == 4:
             harga_satuan = 15000
 
-        elif nama_menu == 5:
+        elif id_pilihan == 5:
             if len(keranjang_belanja) > 0:
                 diskon = diskon_harga(total)
                 rincian_pembelian(keranjang_belanja, total, cacah, diskon)
@@ -69,7 +69,6 @@ while nama_menu != 5:
                         (buktiTransakri_db(nama_metode, diskon))
 
                         break 
-                        
 
                     except ValueError:
                         print("==angka tidak ada pada pilihan, coba lagi==")
@@ -81,7 +80,7 @@ while nama_menu != 5:
             print('==angka tidak ada pada menu, coba lagi==')
             menampilkan_menu(data_menu_dari_query)
 
-        if nama_menu != 5:
+        if id_pilihan != 5:
             jumlah_makanan = int(input("masukkan jumlah makanan:"))
 
             total_sementara =  jumlah_makanan * harga_satuan
@@ -94,4 +93,7 @@ while nama_menu != 5:
     else:
         cacah += 1
         # antara mengubah keranjang belanja atau pun gimana nantinya 
-        # logikaKeranjang_belanja(nama_menu, jumlah_makanan, keranjang_belanja, daftar_menu, daftar_harga)
+        logikaKeranjang_belanja(id_pilihan, jumlah_makanan, keranjang_belanja, data_menu_dari_query)
+
+        print(keranjang_belanja)
+        # belum ada pilihan ke 5

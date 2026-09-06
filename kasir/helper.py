@@ -8,15 +8,25 @@ def menampilkan_menu(data_menu):
     for menu in data_menu:
         print(menu[0], '.', menu[1], 'Rp',menu[3])
 
-def logikaKeranjang_belanja(nama_menu, jumlah_makanan, keranjang_belanja, daftar_menu, daftar_harga):
+def logikaKeranjang_belanja(id_pilihan, jumlah_makanan, keranjang_belanja, data_menu_dari_query):
+    # mencari tau id_pilihan yg dipilih itu isinya apa
+    for menu in data_menu_dari_query:
+        if id_pilihan == menu[0]:
+            nama_menu = menu[1]
+            harga = menu[3]
+            break
+        else:
+            print("id menu tidak ditemukan")
+        
+    # mengecek apakah id mnunya sudah ada di dalam keranjang atau belum
     sudah_ada = False
     for cek in range(len(keranjang_belanja)):
-        if daftar_menu[nama_menu - 1] == keranjang_belanja[cek][0]:
-            keranjang_belanja[cek][2] += jumlah_makanan
+        if id_pilihan == keranjang_belanja[cek][0]:
+            keranjang_belanja[cek][3] += jumlah_makanan
             sudah_ada = True
             break
     if sudah_ada == False:
-        keranjang_belanja.append([daftar_menu[nama_menu-1], daftar_harga[nama_menu-1], jumlah_makanan]) 
+        keranjang_belanja.append([id_pilihan, nama_menu,harga, jumlah_makanan]) 
 
 def diskon_harga(total):
     if total >= 100000:
