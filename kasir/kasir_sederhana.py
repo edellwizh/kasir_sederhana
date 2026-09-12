@@ -14,31 +14,22 @@ daftar_pembayaran = [
 cacah = 0
 total = 0 
 keranjang_belanja = []
-   
-id_pilihan = 0
-while id_pilihan != 5:
+daftar_id = []
+
+while True:
     # menampilkan menu
     data_menu_dari_query = ambil_menu_db()
     menampilkan_menu(data_menu_dari_query)
 
     # input
     try:
-        id_pilihan = int(input("masukkan angka makanan pada menu:"))
+        id_pilihan = int(input("Masukkan Angka Pada Menu: (0: Selesai):"))
 
-        # logika pilihan
-        if id_pilihan == 1:
-            harga_satuan = 10000
-        elif id_pilihan == 2: 
-            harga_satuan = 12000
-        elif id_pilihan == 3:
-            harga_satuan = 13000
-        elif id_pilihan == 4:
-            harga_satuan = 15000
-
-        elif id_pilihan == 5:
+        if id_pilihan == 0:
             if len(keranjang_belanja) > 0:
-                diskon = diskon_harga(total)
-                rincian_pembelian(keranjang_belanja, total, cacah, diskon)
+                total = hitung_total(keranjang_belanja)
+                total_setelah_diskon = diskon_harga(total)
+                rincian_pembelian(keranjang_belanja, total, cacah, total_setelah_diskon)
 
                 # Logika Pembayaran
                 while True:
@@ -50,50 +41,55 @@ while id_pilihan != 5:
                             for pembayaran in range(len(daftar_pembayaran)):
                                 print(pembayaran + 1,'.', daftar_pembayaran[pembayaran])
 
-                        pilih_pembayaran = int(input("Masukkan nomor pembayaran yang tertera pada daftar:"))
+                        pilih_pembayaran = int(input("Masukkan Nomor Pembayaran yang Tertera Pada Daftar:"))
                         waktu_transaksi = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
                         if pilih_pembayaran == 1:
                         # sebuah qris dengan timer. namun, dimenit ke 1 sudah muncul apakah pembayaran sudah berhasil?
-                            pembayaran_qris(diskon)
+                            pembayaran_qris(total_setelah_diskon)
                             nama_metode = "QRIS"
 
                         elif pilih_pembayaran == 2:
                             # membuat fungsi memasukkan duit beserta logikanya
-                            pembayaran_tunai(diskon)
+                            pembayaran_tunai(total_setelah_diskon)
                             nama_metode = "Tunai"
 
-                        struk_buktiPembayaran(diskon, nama_metode, waktu_transaksi)
+                        else:
+                            print("==Pilihan Pembayaran Tidak Ada, Coba Lagi")
+
+                        struk_buktiPembayaran(total_setelah_diskon, nama_metode, waktu_transaksi)
 
                         print('selesai')
-                        (buktiTransakri_db(nama_metode, diskon))
+                        (buktiTransakri_db(nama_metode, total_setelah_diskon))
 
                         break 
-
+                    # menangani pilih pembayaran > 2 karena piliihannya hanya ada 2
                     except ValueError:
-                        print("==angka tidak ada pada pilihan, coba lagi==")
+                        print("==Angka Tidak Ada Pada Pilihan, Coba Lagi==")
+            # ketika user input 0 maka keranjang langsung kosong
             else:
                 print("Keranjang belanja anda kosong")
-                print('selesai')
-                break
-        else:
-            print('==angka tidak ada pada menu, coba lagi==')
-            menampilkan_menu(data_menu_dari_query)
+                print('Selesai')
+            break
 
-        if id_pilihan != 5:
-            jumlah_makanan = int(input("masukkan jumlah makanan:"))
+        # memasukan id menu ke dalam daftar_id
+        for menu in data_menu_dari_query:
+            daftar_id.append(menu[0])
 
-            total_sementara =  jumlah_makanan * harga_satuan
-            total += total_sementara
-            print("==Total saat ini==:", total_sementara)
+        # mengecek apakah id yg diketik ada di dalam daftar_id atau tidak
+        if id_pilihan not in daftar_id:
+            print("==Menu Tidak Ada Pada Pilihan, Coba Lagi==")
+            continue
 
+        jumlah_makanan = int(input("Masukkan Jumlah Makanan:"))
+
+    # menangani input berupa selain angka
     except ValueError:
-        print("==angka tidak ada pada menu, coba lagi==")
+        print("==Angka Tidak Ada Pada Pilihan, Coba Lagi==")
 
     else:
         cacah += 1
-        # antara mengubah keranjang belanja atau pun gimana nantinya 
         logikaKeranjang_belanja(id_pilihan, jumlah_makanan, keranjang_belanja, data_menu_dari_query)
 
-        print(keranjang_belanja)
-        # belum ada pilihan ke 5
+
+        # jumlah makanan tidak boleh 0 kalo udah milih menunya

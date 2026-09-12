@@ -15,8 +15,6 @@ def logikaKeranjang_belanja(id_pilihan, jumlah_makanan, keranjang_belanja, data_
             nama_menu = menu[1]
             harga = menu[3]
             break
-        else:
-            print("id menu tidak ditemukan")
         
     # mengecek apakah id mnunya sudah ada di dalam keranjang atau belum
     sudah_ada = False
@@ -27,6 +25,12 @@ def logikaKeranjang_belanja(id_pilihan, jumlah_makanan, keranjang_belanja, data_
             break
     if sudah_ada == False:
         keranjang_belanja.append([id_pilihan, nama_menu,harga, jumlah_makanan]) 
+
+def hitung_total(keranjang_belanja):
+    total = 0
+    for item in keranjang_belanja:
+        total += item[2] * item[3] # harga * jumlah
+    return total
 
 def diskon_harga(total):
     if total >= 100000:
@@ -42,9 +46,9 @@ def rincian_pembelian(keranjang_belanja, total, cacah, diskon):
     print('jumlah memesan:', cacah, 'x')
     print('No|Menu|Harga Satuan|Jumlah = total')
     for i in range(len(keranjang_belanja)):
-        nama_menu = keranjang_belanja[i][0]
-        harga_satuan = keranjang_belanja[i][1]
-        jumlah_makanan = keranjang_belanja[i][2]
+        nama_menu = keranjang_belanja[i][1]
+        harga_satuan = keranjang_belanja[i][2]
+        jumlah_makanan = keranjang_belanja[i][3]
 
         total_sementara =  jumlah_makanan * harga_satuan
         print(i + 1,'.|',nama_menu,"|",harga_satuan,"|",jumlah_makanan,"=",total_sementara)
@@ -55,28 +59,28 @@ def rincian_pembelian(keranjang_belanja, total, cacah, diskon):
         print("Total Pembayaran Setelah Diskon:", diskon)
         print("==Selamat Anda Mendapatkan Diskon 15%==")
 
-def pembayaran_tunai(diskon):
+def pembayaran_tunai(total_setelah_diskon):
     while True:
         try:
-            jumlah_uang = int(input("Masukkan nominal uang anda: Rp."))
+            jumlah_uang = int(input("Masukkan Nominal Uang Anda: Rp."))
 
-            if jumlah_uang >= diskon:
-                kembalian = jumlah_uang - diskon
+            if jumlah_uang >= total_setelah_diskon:
+                kembalian = jumlah_uang - total_setelah_diskon
                 print("== Pembayaran Via Tunai ==")
                 print("==Pembayaran Anda Telah Berhasil==")
-                print("==Silahkan ke kasir untuk memberikan bukti ini==")
+                print("==Silahkan ke Kasir Untuk Memberikan Bukti Ini==")
                 print("Kembalian:", kembalian)
-                break
+                return kembalian, jumlah_uang
 
-            else:
+            if jumlah_uang < total_setelah_diskon:
                 print("==Uang yang Anda masukkan kurang dari harga pembelian Anda, coba lagi==")
                 continue
         except ValueError:
-            print("masukkan angka, coba lagi")
+            print("==Masukkan Angka, Coba Lagi==")
 
-def pembayaran_qris(diskon):
+def pembayaran_qris(total_setelah_diskon):
     print("== Pembayaran Via Qris ==")
-    print("Total yang harus dibayar: Rp.", diskon)
+    print("Total yang harus dibayar: Rp.", total_setelah_diskon)
     print("Silakan scan QR code di bawah ini (Simulasi):")
     print("[  [X] QR CODE SIMULASI [X]  ]")
     print("Menunggu konfirmasi pembayaran...")
@@ -85,12 +89,12 @@ def pembayaran_qris(diskon):
     print("\n== Pembayaran QRIS Berhasil! ==")
     print("Silakan tunjukkan layar ini ke kasir.")
 
-def struk_buktiPembayaran(diskon, nama_metode, waktu_transaksi):
+def struk_buktiPembayaran(total_setelah_diskon, nama_metode, waktu_transaksi):
     print("==================================")
     print("       STRUK BUKTI PEMBAYARAN     ")
     print("==================================")
     print("Metode Pembayaran :", nama_metode)
-    print("Total Dibayar     : Rp", diskon)
+    print("Total Dibayar     : Rp", total_setelah_diskon)
     print("Waktu Transaksi   :", waktu_transaksi)
     print("==================================")
     print("== Tunjukkan bukti ini ke kasir ==")
