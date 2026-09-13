@@ -54,6 +54,10 @@ while True:
                             pembayaran_tunai(total_setelah_diskon)
                             nama_metode = "Tunai"
 
+                        elif pilih_pembayaran <= 0:
+                            print("==Pilihan Pembayaran Tidak Ada, coba lagi==")
+                            continue
+
                         else:
                             print("==Pilihan Pembayaran Tidak Ada, Coba Lagi")
 
@@ -62,7 +66,8 @@ while True:
                         print('selesai')
                         (buktiTransakri_db(nama_metode, total_setelah_diskon))
 
-                        break 
+                        break # Tombol exit untuk keluar dari perulangan
+
                     # menangani pilih pembayaran > 2 karena piliihannya hanya ada 2
                     except ValueError:
                         print("==Angka Tidak Ada Pada Pilihan, Coba Lagi==")
@@ -79,9 +84,10 @@ while True:
         # mengecek apakah id yg diketik ada di dalam daftar_id atau tidak
         if id_pilihan not in daftar_id:
             print("==Menu Tidak Ada Pada Pilihan, Coba Lagi==")
-            continue
+            continue # Tombol skip untuk langsung melompat ke awal perulangan berikutnya
 
         jumlah_makanan = int(input("Masukkan Jumlah Makanan:"))
+
 
     # menangani input berupa selain angka
     except ValueError:
@@ -92,4 +98,4 @@ while True:
         logikaKeranjang_belanja(id_pilihan, jumlah_makanan, keranjang_belanja, data_menu_dari_query)
 
 
-        # jumlah makanan tidak boleh 0 kalo udah milih menunya
+        

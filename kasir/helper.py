@@ -11,12 +11,18 @@ def menampilkan_menu(data_menu):
 def logikaKeranjang_belanja(id_pilihan, jumlah_makanan, keranjang_belanja, data_menu_dari_query):
     # mencari tau id_pilihan yg dipilih itu isinya apa
     for menu in data_menu_dari_query:
+
+        # menangani input jumlah makanan <= 0
+        if jumlah_makanan <= 0:
+            print("==Jumlah makanan harus lebih dari 0==")
+            return # Tombol exit untuk keluar dari fungsi
+        
         if id_pilihan == menu[0]:
             nama_menu = menu[1]
             harga = menu[3]
             break
         
-    # mengecek apakah id mnunya sudah ada di dalam keranjang atau belum
+    # mengecek apakah id menunya sudah ada di dalam keranjang atau belum
     sudah_ada = False
     for cek in range(len(keranjang_belanja)):
         if id_pilihan == keranjang_belanja[cek][0]:
