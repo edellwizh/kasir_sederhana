@@ -1,36 +1,37 @@
 import time
-import datetime
 
 # Menampung fungsi pada main.py
 def menampilkan_menu(data_menu):
+    print("===============")
     print("kasir sederhana")
     print("===============")
     for menu in data_menu:
         print(menu[0], '.', menu[1], 'Rp',menu[3])
 
-def logikaKeranjang_belanja(id_pilihan, jumlah_makanan, keranjang_belanja, data_menu_dari_query):
+def logikaKeranjang_belanja(id_pilihan, jumlah_pesan, keranjang_belanja, data_menu_dari_query):
     # mencari tau id_pilihan yg dipilih itu isinya apa
     for menu in data_menu_dari_query:
 
         # menangani input jumlah makanan <= 0
-        if jumlah_makanan <= 0:
+        if jumlah_pesan <= 0:
             print("==Jumlah makanan harus lebih dari 0==")
             return # Tombol exit untuk keluar dari fungsi
         
         if id_pilihan == menu[0]:
             nama_menu = menu[1]
-            harga = menu[3]
+            harga_satuan = menu[3]
+            subtotal = harga_satuan * jumlah_pesan
             break
         
     # mengecek apakah id menunya sudah ada di dalam keranjang atau belum
     sudah_ada = False
     for cek in range(len(keranjang_belanja)):
         if id_pilihan == keranjang_belanja[cek][0]:
-            keranjang_belanja[cek][3] += jumlah_makanan
+            keranjang_belanja[cek][3] += jumlah_pesan
             sudah_ada = True
             break
     if sudah_ada == False:
-        keranjang_belanja.append([id_pilihan, nama_menu,harga, jumlah_makanan]) 
+        keranjang_belanja.append([id_pilihan, nama_menu, harga_satuan, jumlah_pesan, subtotal]) 
 
 def hitung_total(keranjang_belanja):
     total = 0
@@ -47,17 +48,18 @@ def diskon_harga(total):
         return total
 
 def rincian_pembelian(keranjang_belanja, total, cacah, diskon):
-    print("===============")
-    print('Rincian Pembelian:')
-    print('jumlah memesan:', cacah, 'x')
-    print('No|Menu|Harga Satuan|Jumlah = total')
+    print("==================================")
+    print("       RINCIAN PEMBELIAN          ")
+    print("==================================")
+    print('Jumlah Memesan:', cacah, 'x')
+    print(' No |Menu |Harga Satuan|Jumlah = total ')
     for i in range(len(keranjang_belanja)):
         nama_menu = keranjang_belanja[i][1]
         harga_satuan = keranjang_belanja[i][2]
-        jumlah_makanan = keranjang_belanja[i][3]
+        jumlah_pesan = keranjang_belanja[i][3]
+        subtotal = keranjang_belanja[i][4]
 
-        total_sementara =  jumlah_makanan * harga_satuan
-        print(i + 1,'.|',nama_menu,"|",harga_satuan,"|",jumlah_makanan,"=",total_sementara)
+        print(i + 1,'.|',nama_menu," | ",harga_satuan," | ",jumlah_pesan,"=",subtotal)
 
     print("Total Pembayaran:", total)
 

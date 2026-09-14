@@ -64,7 +64,7 @@ while True:
                         struk_buktiPembayaran(total_setelah_diskon, nama_metode, waktu_transaksi)
 
                         print('selesai')
-                        (buktiTransakri_db(nama_metode, total_setelah_diskon))
+                        menyimpan_buktiTransaksi_db(nama_metode, total_setelah_diskon, keranjang_belanja)
 
                         break # Tombol exit untuk keluar dari perulangan
 
@@ -86,7 +86,7 @@ while True:
             print("==Menu Tidak Ada Pada Pilihan, Coba Lagi==")
             continue # Tombol skip untuk langsung melompat ke awal perulangan berikutnya
 
-        jumlah_makanan = int(input("Masukkan Jumlah Makanan:"))
+        jumlah_pesan = int(input("Masukkan Jumlah Makanan:"))
 
 
     # menangani input berupa selain angka
@@ -95,7 +95,7 @@ while True:
 
     else:
         cacah += 1
-        logikaKeranjang_belanja(id_pilihan, jumlah_makanan, keranjang_belanja, data_menu_dari_query)
+        logikaKeranjang_belanja(id_pilihan, jumlah_pesan, keranjang_belanja, data_menu_dari_query)
 
 
         
