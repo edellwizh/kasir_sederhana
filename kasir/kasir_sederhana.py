@@ -17,7 +17,7 @@ keranjang_belanja = []
 daftar_id = []
 
 while True:
-    # menampilkan menu
+    """ Mengambil data menu dari query untuk menjalankan fungsi menampilkan menu"""
     data_menu_dari_query = ambil_menu_db()
     menampilkan_menu(data_menu_dari_query)
 
@@ -45,7 +45,7 @@ while True:
                         waktu_transaksi = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
                         if pilih_pembayaran == 1:
-                        # sebuah qris dengan timer. namun, dimenit ke 1 sudah muncul apakah pembayaran sudah berhasil?
+                        # sebuah qris dengan timer. namun, dimenit ke 1 sudah muncul apakah pembayaran sudah berhasil
                             pembayaran_qris(total_setelah_diskon)
                             nama_metode = "QRIS"
 
@@ -61,23 +61,26 @@ while True:
                         else:
                             print("==Pilihan Pembayaran Tidak Ada, Coba Lagi")
 
+                        # menampilkan struk bukti pembayaran
                         struk_buktiPembayaran(total_setelah_diskon, nama_metode, waktu_transaksi)
 
                         print('selesai')
+                        # menambahkan seluruh transaksi ke dalam database
                         menyimpan_buktiTransaksi_db(nama_metode, total_setelah_diskon, keranjang_belanja)
 
-                        break # Tombol exit untuk keluar dari perulangan
+                        break # tombol exit untuk keluar dari perulangan
 
                     # menangani pilih pembayaran > 2 karena piliihannya hanya ada 2
                     except ValueError:
                         print("==Angka Tidak Ada Pada Pilihan, Coba Lagi==")
-            # ketika user input 0 maka keranjang langsung kosong
+
+            # ketika user input id pilihan 0 maka keranjang langsung kosong
             else:
                 print("Keranjang belanja anda kosong")
                 print('Selesai')
             break
 
-        # memasukan id menu ke dalam daftar_id
+        # mendaftarkan id menu ke dalam daftar_id supaya ketika input > dari daftar_id maka muncul pernyataan error
         for menu in data_menu_dari_query:
             daftar_id.append(menu[0])
 
@@ -88,8 +91,7 @@ while True:
 
         jumlah_pesan = int(input("Masukkan Jumlah Makanan:"))
 
-
-    # menangani input berupa selain angka
+    # menangani input id_pilihan dan jumlah_pesan berupa selain angka
     except ValueError:
         print("==Angka Tidak Ada Pada Pilihan, Coba Lagi==")
 
