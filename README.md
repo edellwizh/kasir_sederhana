@@ -6,7 +6,7 @@ Proyek ini menjadi fondasi penting bagi saya untuk terus berkembang dan mendalam
 
 ---
 
-## 📌 Hal yang Saya Pelajari di Proyek Ini
+## Hal yang Saya Pelajari di Proyek Ini
 
 - **Dasar Python & CLI:** Mengolah *input* pengguna, manipulasi *list* dan *dictionary*, serta membuat alur program di terminal.
 - **Koneksi Database:** Mengintegrasikan Python dengan MySQL menggunakan `mysql-connector-python`.
@@ -15,15 +15,15 @@ Proyek ini menjadi fondasi penting bagi saya untuk terus berkembang dan mendalam
 
 ---
 
-## 🛠️ Prasyarat & Alat yang Digunakan
+## Alat yang Digunakan
 
-- **Python 3.x**
+- **Python 3.14.6**
 - **Laragon** (untuk menjalankan Apache & MySQL / phpMyAdmin)
 - **Library Python:** `mysql-connector-python`
 
 ---
 
-## 🗄️ Struktur Database (`db_kasir`)
+## Struktur Database (`db_kasir`)
 
 Proyek ini menggunakan database `db_kasir` dengan 3 tabel utama:
 
